@@ -12,13 +12,13 @@
 ;                           |P3.1 TXD     P1.1|     DATA
 ;                           |XTAL         P1.2|     DATA
 ;                           |XTAL         P1.3|     DATA
-;                   GETE    |P3.2         P1.4|     DATA
-;                           |P3.3         P1.5|     DATA
-;                   CLK     |P3.4         P1.6|     DATA
-;                           |P3.5         P1.7|     DATA
-;                   OUT     |P2.4         P3.7|
-;                           |P2.5         P2.7|
-;                           |GND          P2.6|
+;                   GETE1   |P3.2         P1.4|     DATA
+;                   GETE2   |P3.3         P1.5|     DATA
+;                   CLK1    |P3.4         P1.6|     DATA
+;                   CLK2    |P3.5         P1.7|     DATA
+;                   OUT1    |P2.4         P3.7|
+;                   OUT2    |P2.5         P2.7|
+;                           |GND          P2.6|     OUT3
 ;                            -----------------
 
 
@@ -27,18 +27,26 @@
     EXTRN CODE (INT_0)
     EXTRN CODE (TIM0_INIT)
     EXTRN CODE (TIM_0)
+    EXTRN CODE (TIM1_INIT)
+    EXTRN CODE (TIM_1)
     EXTRN CODE (Init_UART)
-    EXTRN CODE (SendOneByte)  
+    EXTRN CODE (SendOneByte)
+    EXTRN CODE (PCA0_INIT)
+    EXTRN CODE (PCA_0)
     ORG 0000H                        //以下程序存储位置
     LJMP MAIN     
     
     _MAIN_ASM  SEGMENT  CODE        //动态分配代码位置
     RSEG  _MAIN_ASM
-    
+    ORG 0100H
 MAIN:
     CLR P3.2
+    CLR P3.3
+    MOV R3, #10
     LCALL TIM0_INIT
-    LCALL Init_UART
+    LCALL TIM1_INIT
+    LCALL PCA0_INIT
+;    LCALL Init_UART
 WHILE:
 
     JB P2.2, WHILE                  //WR引脚
@@ -47,30 +55,32 @@ WHILE:
     ANL A,  #3H
 
 ;  *************************************下面为模拟计数器0部分**********************************************;
-;CJNE A, #00H, TIM_8254_0
+CJNE A, #00H, TIM_8254_0
 
-;    MOV A, #0FFH
-;    SUBB A, R0
-;    MOV TH0, A
-;    MOV TL0, A
-;TIM_8254_0:                         //计数器0未触发
-
-;  *************************************下面为模拟计数器1部分**********************************************;
-;CJNE A, #01H, TIM_8254_1
-;    MOV A, #0FFH
-;    SUBB A, R0
-;    MOV TH0, A
-;    MOV TL0, A
-;TIM_8254_1:                         //计数器1未触发
-
-;;  *************************************下面为模拟计数器2部分**********************************************;
-CJNE A, #02H, TIM_8254_2
     MOV A, #0FFH
     SUBB A, R0
-    MOV TH0, A     //
+    MOV TH0, A
     MOV TL0, A
-TIM_8254_2:                         //计数器2未触发
+TIM_8254_0:                         //计数器0未触发
 
+;  *************************************下面为模拟计数器1部分**********************************************;
+CJNE A, #01H, TIM_8254_1
+    MOV A, #0FFH
+    SUBB A, R0
+    MOV TH1, A
+    MOV TL1, A
+TIM_8254_1:                         //计数器1未触发
+
+;  *************************************下面为模拟计数器2部分**********************************************;
+
+CJNE A, #02H, TIM_8254_2
+    MOV A, R0
+    MOV R3, A
+TIM_8254_2:                         //计数器2未触发
+JNB P3.2 PCA_FLAG
+
+
+PCA_FLAG:
 ;  *************************************下面为模拟com设定部分**********************************************;
 
 
