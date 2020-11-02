@@ -77,7 +77,7 @@ CJNE A, #02H, TIM_8254_2
     MOV A, R0
     MOV R3, A
 TIM_8254_2:                         //¼ÆÊýÆ÷2Î´´¥·¢
-JNB P3.2 PCA_FLAG
+;JNB P3.2 PCA_FLAG
 
 
 PCA_FLAG:
