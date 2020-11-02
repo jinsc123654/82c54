@@ -406,25 +406,15 @@
               <FileType>2</FileType>
               <FilePath>.\82C54.asm</FilePath>
             </File>
+            <File>
+              <FileName>PCA.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\PCA.asm</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
     </Target>
   </Targets>
-
-  <LayerInfo>
-    <Layers>
-      <Layer>
-        <LayName>&lt;Project Info&gt;</LayName>
-        <LayDesc></LayDesc>
-        <LayUrl></LayUrl>
-        <LayKeys></LayKeys>
-        <LayCat></LayCat>
-        <LayLic></LayLic>
-        <LayTarg>0</LayTarg>
-        <LayPrjMark>1</LayPrjMark>
-      </Layer>
-    </Layers>
-  </LayerInfo>
 
 </Project>
