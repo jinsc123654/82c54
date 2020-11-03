@@ -12,9 +12,9 @@
     PCACCAP2H EQU  0FCH
     PCACCAPM2 EQU  0DCH
     OUT3     BIT     P2.6                     //定义OUT3的引脚
-    ORG 003BH                        //以下程序存储位置
+    ORG 003BH                                 //以下程序存储位置
 PCA_0:  
-    JNB CCON.0, PCA0_END
+;    JNB CCON.0, PCA0_END
     CLR CCON.0
     MOV A, PCACCAP0L
     ADD A, R3
@@ -39,8 +39,9 @@ PCA0_INIT:
     MOV PCACCAP0L, R3
     MOV PCACCAP0H, #0
     MOV PCACCAPM0, #04DH
-    
+
     CLR CCON.6
+    
     SETB IE.6
     SETB EA
         
